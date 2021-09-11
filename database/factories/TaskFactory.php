@@ -5,7 +5,8 @@ namespace Database\Factories;
 use App\Models\Task;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class TaskFactory extends Factory {
+class TaskFactory extends Factory
+{
     /**
      * The name of the factory's corresponding model.
      *
@@ -18,10 +19,12 @@ class TaskFactory extends Factory {
      *
      * @return array
      */
-    public function definition() {
+    public function definition()
+    {
         return [
-            'project_id' => $this->faker->numberBetween(1, 3),
-            'name'       => $this->faker->text,
+            'project_id' => $this->faker->numberBetween(1, 10),
+            'name' => $this->faker->text(),
+            'due_date' => \Carbon\Carbon::createFromTimeStamp($this->faker->dateTimeBetween('now', '+7 days')->getTimestamp()),
         ];
     }
 }
