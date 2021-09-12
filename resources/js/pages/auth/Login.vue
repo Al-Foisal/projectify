@@ -26,7 +26,14 @@
                     v-model="password"
                 />
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <p v-if="!!error">{{ error }}</p>
+            <button
+                type="submit"
+                :disabled="isLoading"
+                class="btn btn-primary"
+            >
+                Submit
+            </button>
         </form>
     </div>
 </template>
@@ -38,29 +45,23 @@ export default {
             email: '',
             password: '',
             isLoading: false,
-            error: '',
+            error: null,
         };
     },
     methods: {
-        submitForm() {
-            axios.get('/sanctum/csrf-cookie').then((response) => {
-                axios
-                    .post('/api/authenticate', {
-                        email: this.email,
-                        password: this.password,
-                    })
-                    .then((response) => {
-                        console.log(response.data);
-                        if (response.data.success) {
-                            this.$router.push({ name: 'dashboard' });
-                        } else {
-                            this.error = response.data.message;
-                        }
-                    })
-                    .catch(function (error) {
-                        console.error(error);
-                    });
-            });
+        async submitForm() {
+            this.isLoading = true;
+            try {
+                await this.$store.dispatch('setLogin', {
+                    email: this.email,
+                    password: this.password,
+                });
+                this.$router.replace({ name: 'dashboard' });
+                this.isLoading = false;
+            } catch (err) {
+                this.error = err;
+                this.isLoading = false;
+            }
         },
     },
 };

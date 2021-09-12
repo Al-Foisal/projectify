@@ -15,24 +15,24 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
+                    <li class="nav-item" v-if="isLogin">
                         <router-link
                             :to="{ name: 'dashboard' }"
                             class="nav-link"
                             >Dashboard</router-link
                         >
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" v-if="isLogin">
                         <router-link :to="{ name: 'projects' }" class="nav-link"
                             >Projects</router-link
                         >
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" v-if="!isLogin">
                         <router-link :to="{ name: 'login' }" class="nav-link"
                             >Login</router-link
                         >
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" v-if="isLogin">
                         <router-link :to="{ name: '' }" class="nav-link"
                             >Logout</router-link
                         >
@@ -42,3 +42,12 @@
         </div>
     </nav>
 </template>
+
+<script>
+import { mapGetters } from 'vuex';
+export default {
+    computed: {
+        ...mapGetters(['isLogin']),
+    },
+};
+</script>

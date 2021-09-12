@@ -9,8 +9,8 @@ export default {
             user: null,
         };
     },
-    created() {
-        axios.get('/api/user').then((res) => (this.user = res.data));
+    mounted() {
+        this.user = this.$store.getters['user'];
     },
 };
 </script>
