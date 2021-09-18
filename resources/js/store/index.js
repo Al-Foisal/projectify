@@ -4,7 +4,7 @@ const store = createStore({
     state() {
         return {
             isLogin: false,
-            user: null,
+            user: [],
         };
     },
     mutations: {
@@ -16,26 +16,44 @@ const store = createStore({
         },
     },
     actions: {
-        async setLogin({ commit }, payload) {
+        async setLogin(context, payload) {
             try {
                 await axios.get('/sanctum/csrf-cookie');
                 const res = await axios.post('/api/authenticate', payload);
                 if (!res.data.success) {
                     throw res.message;
                 }
-                await axios
-                    .get('/api/user')
-                    .then((res) => {
-                        commit('setLogin', true);
-                        commit('setUser', res.data);
-                    })
-                    .catch(() => {
-                        commit('setLogin', false);
-                        commit('setUser', null);
-                    });
+
+                return this.dispatch('getUser');
             } catch (error) {
                 throw 'Authentication failed.';
             }
+        },
+
+        async getUser(context) {
+            await axios
+                .get('/api/user')
+                .then((res) => {
+                    context.commit('setLogin', true);
+                    context.commit('setUser', res.data);
+                })
+                .catch(() => {
+                    context.commit('setLogin', false);
+                    context.commit('setUser', null);
+                });
+        },
+
+        async logout(context) {
+            await axios
+                .get('/api/logout')
+                .then((res) => {
+                    context.commit('setLogin', false);
+                    context.commit('setUser', null);
+                })
+                .catch(() => {
+                    context.commit('setLogin', false);
+                    context.commit('setUser', null);
+                });
         },
     },
     getters: {

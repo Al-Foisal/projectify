@@ -33,8 +33,8 @@
                         >
                     </li>
                     <li class="nav-item" v-if="isLogin">
-                        <router-link :to="{ name: '' }" class="nav-link"
-                            >Logout</router-link
+                        <a href="#" class="nav-link" @click="logout()"
+                            >Logout</a
                         >
                     </li>
                 </ul>
@@ -48,6 +48,12 @@ import { mapGetters } from 'vuex';
 export default {
     computed: {
         ...mapGetters(['isLogin']),
+    },
+    methods: {
+        async logout() {
+            await this.$store.dispatch('logout');
+            this.$router.replace({ name: 'login' });
+        },
     },
 };
 </script>

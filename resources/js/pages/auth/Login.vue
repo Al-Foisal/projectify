@@ -27,11 +27,7 @@
                 />
             </div>
             <p v-if="!!error">{{ error }}</p>
-            <button
-                type="submit"
-                :disabled="isLoading"
-                class="btn btn-primary"
-            >
+            <button type="submit" :disabled="isLoading" class="btn btn-primary">
                 Submit
             </button>
         </form>
@@ -39,6 +35,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
     data() {
         return {
@@ -63,6 +61,14 @@ export default {
                 this.isLoading = false;
             }
         },
+    },
+    computed: {
+        ...mapGetters(['isLogin']),
+    },
+    mounted() {
+        if (this.isLogin) {
+            this.$router.push({ name: 'dashboard' });
+        }
     },
 };
 </script>
