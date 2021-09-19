@@ -1,8 +1,10 @@
 <template>
     <div class="card">
         <div class="card-header">All Projects</div>
+
         <p v-if="isLoading">Loading...</p>
         <div class="card-body" v-else>
+        <button type="button" class="btn btn-info">Add Project</button>
             <blockquote class="blockquote mb-0">
                 <table class="table">
                     <thead>

@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Login from './pages/auth/Login.vue';
 import Dashboard from './pages/Dashboard.vue';
 import Projects from './pages/projects/Projects.vue';
+import ProjectDetail from './pages/projects/ProjectDetail.vue';
 import store from './store';
 
 const router = createRouter({
@@ -21,6 +22,13 @@ const router = createRouter({
             component: Projects,
             name: 'projects',
             meta: { requiresAuth: true },
+        },
+        {
+            path: '/projects/:id',
+            component: ProjectDetail,
+            name: 'project-detail',
+            meta: { requiresAuth: true },
+            props: true,
         },
     ],
 });
