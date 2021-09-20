@@ -4,7 +4,7 @@
 
         <p v-if="isLoading">Loading...</p>
         <div class="card-body" v-else>
-        <button type="button" class="btn btn-info">Add Project</button>
+            <button type="button" class="btn btn-info">Add Project</button>
             <blockquote class="blockquote mb-0">
                 <table class="table">
                     <thead>
@@ -21,6 +21,7 @@
                             :key="project.id"
                             :project="project"
                             :counter="index"
+                            @delete-projects="fetchProjects"
                         >
                         </projects-item>
                     </tbody>
@@ -43,12 +44,17 @@ export default {
             isLoading: false,
         };
     },
+    methods: {
+        fetchProjects() {
+            axios.get('/api/projects').then((res) => {
+                this.projects = res.data.data;
+            });
+        },
+    },
     mounted() {
         this.isLoading = true;
-        axios.get('/api/projects').then((res) => {
-            this.projects = res.data.data;
-            this.isLoading = false;
-        });
+        this.fetchProjects();
+        this.isLoading = false;
     },
 };
 </script>

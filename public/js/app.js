@@ -19776,14 +19776,19 @@ __webpack_require__.r(__webpack_exports__);
       isLoading: false
     };
   },
-  mounted: function mounted() {
-    var _this = this;
+  methods: {
+    fetchProjects: function fetchProjects() {
+      var _this = this;
 
+      axios.get('/api/projects').then(function (res) {
+        _this.projects = res.data.data;
+      });
+    }
+  },
+  mounted: function mounted() {
     this.isLoading = true;
-    axios.get('/api/projects').then(function (res) {
-      _this.projects = res.data.data;
-      _this.isLoading = false;
-    });
+    this.fetchProjects();
+    this.isLoading = false;
   }
 });
 
@@ -19801,7 +19806,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['project', 'counter']
+  props: ['project', 'counter'],
+  // emits: ['delete-projects'],
+  methods: {
+    deleteProject: function deleteProject(id) {
+      var _this = this;
+
+      axios["delete"]('api/projects/' + id).then(function (res) {
+        _this.$emit('delete-projects');
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -20302,10 +20317,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_projects_item, {
       key: project.id,
       project: project,
-      counter: index
+      counter: index,
+      onDeleteProjects: $options.fetchProjects
     }, null, 8
     /* PROPS */
-    , ["project", "counter"]);
+    , ["project", "counter", "onDeleteProjects"]);
   }), 128
   /* KEYED_FRAGMENT */
   ))])])])]))]);
@@ -20337,13 +20353,6 @@ var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 /* HOISTED */
 );
 
-var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-  type: "button",
-  "class": "btn btn-danger"
-}, "Delete", -1
-/* HOISTED */
-);
-
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_router_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-link");
 
@@ -20369,7 +20378,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   }, 8
   /* PROPS */
-  , ["to"]), _hoisted_3])]);
+  , ["to"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    "class": "btn btn-danger",
+    onClick: _cache[0] || (_cache[0] = function ($event) {
+      return $options.deleteProject($props.project.id);
+    })
+  }, " Delete ")])]);
 }
 
 /***/ }),
