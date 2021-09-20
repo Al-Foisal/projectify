@@ -8,8 +8,12 @@
                 Add Project
             </button>
             <div v-show="showForm">
-                <add-project @project-added="fetchProjects"></add-project>
+                <add-project
+                    @project-added="fetchProjects"
+                    @cancel-form="showForm = false"
+                ></add-project>
             </div>
+
             <blockquote class="blockquote mb-0">
                 <table class="table">
                     <thead>

@@ -1,7 +1,18 @@
 <template>
-
-    <br>
+    <br />
     <h1>Project Details</h1>
+
+    <button @click="showForm = true" type="button" class="btn btn-info">
+        Edit Project
+    </button>
+    <div v-show="showForm">
+        <edit-project
+            @project-edited="fetchProject"
+            @cancel-form="showForm = false"
+            :project="project"
+        ></edit-project>
+    </div>
+
     <table class="table table-striped">
         <thead>
             <tr>
@@ -16,9 +27,9 @@
                 <td>{{ project.tasks_count }}</td>
                 <td>{{ project.created_at }}</td>
             </tr>
-            <hr>
+            <hr />
             <h1>Related Project Tasks</h1>
-            <hr>
+            <hr />
             <tr>
                 <td colspan="4">
                     <table class="table mb-0">
@@ -49,21 +60,30 @@
 
 <script>
 import TasksItem from './TasksItem.vue';
+import EditProject from './EditProject.vue';
 
 export default {
     props: ['id'],
     components: {
         TasksItem,
+        EditProject,
     },
     data() {
         return {
             project: [],
+            showForm: false,
         };
     },
+    methods: {
+        fetchProject() {
+            this.showForm = false;
+            axios
+                .get('api/projects/' + this.id)
+                .then((res) => (this.project = res.data.data));
+        },
+    },
     mounted() {
-        axios
-            .get('api/projects/' + this.id)
-            .then((res) => (this.project = res.data.data));
+        this.fetchProject();
     },
 };
 </script>

@@ -12,7 +12,7 @@
                 class="form-control"
                 id="exampleInputEmail1"
                 aria-describedby="emailHelp"
-                v-model="name"
+                v-model="projectName"
             />
             <div id="emailHelp" class="form-text" v-if="errorMsg.length">
                 {{ errorMsg }}
@@ -28,32 +28,36 @@
 
 <script>
 export default {
+    props: ['project'],
     data() {
         return {
-            name: '',
+            projectName: this.project.name,
             errorMsg: '',
         };
     },
     methods: {
         async submitForm() {
             try {
-                const response = await axios.post('api/projects', {
-                    name: this.name,
-                });
+                const response = await axios.put(
+                    'api/projects/' + this.project.id,
+                    {
+                        name: this.projectName,
+                    }
+                );
 
                 if (response.data.status == 'ok') {
-                    this.name = '';
+                    this.projectName = '';
                     this.errorMsg = '';
-                    this.$emit('project-added');
+                    this.$emit('project-edited');
                 }
             } catch (e) {
-                if (e.response.data.error.name[0].length > 0) {
-                    this.errorMsg = e.response.data.error.name[0];
+                if (e.response.data.error.projectName[0].length > 0) {
+                    this.errorMsg = e.response.data.error.projectName[0];
                 }
             }
         },
         cancelForm() {
-            this.name = '';
+            this.projectName = '';
             this.errorMsg = '';
             this.$emit('cancel-form');
         },
