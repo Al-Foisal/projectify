@@ -1,10 +1,15 @@
 <template>
-    <div class="card">
+    <p v-if="isLoading">Loading...</p>
+    <div class="card" v-else>
         <div class="card-header">All Projects</div>
 
-        <p v-if="isLoading">Loading...</p>
-        <div class="card-body" v-else>
-            <button type="button" class="btn btn-info">Add Project</button>
+        <div class="card-body">
+            <button @click="showForm = true" type="button" class="btn btn-info">
+                Add Project
+            </button>
+            <div v-show="showForm">
+                <add-project @project-added="fetchProjects"></add-project>
+            </div>
             <blockquote class="blockquote mb-0">
                 <table class="table">
                     <thead>
@@ -33,19 +38,23 @@
 
 <script>
 import ProjectsItem from './ProjectsItem.vue';
+import AddProject from './AddProject.vue';
 
 export default {
     components: {
         ProjectsItem,
+        AddProject,
     },
     data() {
         return {
             projects: [],
             isLoading: false,
+            showForm: false,
         };
     },
     methods: {
         fetchProjects() {
+            this.showForm = false;
             axios.get('/api/projects').then((res) => {
                 this.projects = res.data.data;
             });
