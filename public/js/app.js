@@ -19917,6 +19917,17 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('api/projects/' + this.id).then(function (res) {
         return _this.project = res.data.data;
       });
+    },
+    deleteTask: function deleteTask(id) {
+      var _this2 = this;
+
+      axios["delete"]('api/tasks/' + id).then(function (res) {
+        var index = _this2.project.tasks.map(function (i) {
+          return i.id;
+        }).indexOf(id);
+
+        _this2.project.tasks.splice(index, 1);
+      });
     }
   },
   mounted: function mounted() {
@@ -20580,10 +20591,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_tasks_item, {
       key: task.id,
       task: task,
-      counter: index
+      counter: index,
+      onDeleteTask: $options.deleteTask
     }, null, 8
     /* PROPS */
-    , ["task", "counter"]);
+    , ["task", "counter", "onDeleteTask"]);
   }), 128
   /* KEYED_FRAGMENT */
   ))])])])])])])], 64
@@ -20753,17 +20765,16 @@ __webpack_require__.r(__webpack_exports__);
 
 var _hoisted_1 = ["role"];
 
-var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
   type: "button",
   "class": "btn btn-primary"
-}, "View"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-  type: "button",
-  "class": "btn btn-danger"
-}, "Delete")], -1
+}, "View", -1
 /* HOISTED */
 );
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
+  var _this = this;
+
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
     "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({
       'alert alert-dark': $props.task.priority === 'High'
@@ -20779,7 +20790,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* TEXT */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.task.created_at), 1
   /* TEXT */
-  ), _hoisted_2], 10
+  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    onClick: _cache[0] || (_cache[0] = function ($event) {
+      return _this.$emit('delete-task', $props.task.id);
+    }),
+    type: "button",
+    "class": "btn btn-danger"
+  }, " Delete ")])], 10
   /* CLASS, PROPS */
   , _hoisted_1);
 }

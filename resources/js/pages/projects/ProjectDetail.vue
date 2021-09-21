@@ -48,6 +48,7 @@
                                 :key="task.id"
                                 :task="task"
                                 :counter="index"
+                                @delete-task="deleteTask"
                             >
                             </tasks-item>
                         </tbody>
@@ -80,6 +81,12 @@ export default {
             axios
                 .get('api/projects/' + this.id)
                 .then((res) => (this.project = res.data.data));
+        },
+        deleteTask(id) {
+            axios.delete('api/tasks/' + id).then((res) => {
+                const index = this.project.tasks.map((i) => i.id).indexOf(id);
+                this.project.tasks.splice(index, 1);
+            });
         },
     },
     mounted() {

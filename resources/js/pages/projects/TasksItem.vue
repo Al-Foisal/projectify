@@ -10,7 +10,13 @@
         <td>
             <button type="button" class="btn btn-primary">View</button>
 
-            <button type="button" class="btn btn-danger">Delete</button>
+            <button
+                @click="this.$emit('delete-task', task.id)"
+                type="button"
+                class="btn btn-danger"
+            >
+                Delete
+            </button>
         </td>
     </tr>
 </template>
