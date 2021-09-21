@@ -30,6 +30,22 @@
             <hr />
             <h1>Related Project Tasks</h1>
             <hr />
+
+            <button
+                @click="showTaskForm = true"
+                type="button"
+                class="btn btn-info"
+            >
+                Add Task
+            </button>
+            <div v-show="showTaskForm">
+                <add-task
+                    @task-added="fetchProject"
+                    @cancel-form="showTaskForm = false"
+                    :project-id="project.id"
+                ></add-task>
+            </div>
+
             <tr>
                 <td colspan="4">
                     <table class="table mb-0">
@@ -62,22 +78,26 @@
 <script>
 import TasksItem from './TasksItem.vue';
 import EditProject from './EditProject.vue';
+import AddTask from './AddTask.vue';
 
 export default {
     props: ['id'],
     components: {
         TasksItem,
         EditProject,
+        AddTask,
     },
     data() {
         return {
             project: [],
             showForm: false,
+            showTaskForm: false,
         };
     },
     methods: {
         fetchProject() {
             this.showForm = false;
+            this.showTaskForm = false;
             axios
                 .get('api/projects/' + this.id)
                 .then((res) => (this.project = res.data.data));

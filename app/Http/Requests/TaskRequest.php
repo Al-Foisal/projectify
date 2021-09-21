@@ -22,7 +22,7 @@ class TaskRequest extends FormRequest {
     public function rules() {
         return [
             'project_id' => ['required', 'integer'],
-            'name'       => ['required', 'min:20'],
+            'name'       => ['required', 'min:2'],
             'due_date'   => ['nullable', 'date', 'after_or_equal:today'],
         ];
     }
